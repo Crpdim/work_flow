@@ -1,23 +1,11 @@
-# task_manager.py
-
-import importlib
 import logging
+from task_loader import TaskLoader
 
 class TaskManager:
     def __init__(self, config):
         self.config = config
-        self.tasks = self.load_tasks()
-
-    def load_tasks(self):
-        tasks = []
-        for task_config in self.config["tasks"]:
-            if task_config.get("enabled", False):
-                task_name = task_config["name"]
-                task_module = importlib.import_module(f"task.{task_name.lower()}_task")
-                task_class = getattr(task_module, f"{task_name}Task")
-                task_instance = task_class(task_config)
-                tasks.append(task_instance)
-        return tasks
+        self.task_loader = TaskLoader(self.config)  # 加载任务
+        self.tasks = self.task_loader.load_tasks()  # 加载任务实例
 
     def execute(self):
         logging.basicConfig(level=logging.INFO)
@@ -26,13 +14,12 @@ class TaskManager:
                 self.execute_task(task)
 
     def check_dependencies(self, task):
-        # 检查依赖任务是否已经完成
-        if "dependencies" in task.config:
-            for dep_task_name in task.config["dependencies"]:
-                dep_task = self.get_task_by_name(dep_task_name)
-                if not dep_task.is_completed:
-                    logging.warning(f"任务 {task.config['name']} 的依赖 {dep_task_name} 尚未完成，跳过执行")
-                    return False
+        dependencies = task.config.get("dependencies", [])
+        for dep_task_name in dependencies:
+            dep_task = self.get_task_by_name(dep_task_name)
+            if not dep_task.is_completed:
+                logging.warning(f"任务 {task.config['name']} 的依赖 {dep_task_name} 尚未完成，跳过执行")
+                return False
         return True
 
     def get_task_by_name(self, task_name):

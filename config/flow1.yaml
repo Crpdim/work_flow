@@ -1,0 +1,17 @@
+tasks:
+  - name: "GitCloneMain"
+    enabled: true
+    repo_url: "https://github.com/your/main-repo.git"
+    clone_path: "/path/to/main/repo"
+    max_retries: 1
+    retry_delay: 5
+    recover_on_failure: true
+
+  - name: "GitCloneSource"
+    enabled: true
+    source_repo_url: "https://github.com/your/thirdparty-repo.git"
+    source_clone_path: "/path/to/main/repo/source/thirdpart"
+    dependencies:
+      - "GitCloneMain"
+    max_retries: 2
+    retry_delay: 10
