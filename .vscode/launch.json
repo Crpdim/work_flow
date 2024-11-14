@@ -10,7 +10,7 @@
             "type": "debugpy",
             "request": "launch",
             "program": "main.py",
-            "args": ["-p clone_path=xxx max_retries=2"],
+            "args": ["-tflow1"],
             "console": "integratedTerminal"
         }
     ]

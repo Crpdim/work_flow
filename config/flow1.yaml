@@ -1,11 +1,21 @@
 tasks:
   - name: "GitCloneMain"
     enabled: true
-    repo_url: "https://github.com/your/main-repo.git"
-    clone_path: "/path/to/main/repo"
-    max_retries: 1
+    private_key_path: "C:/Users/10707/.ssh/id_rsa"
+    repo_url: "git@github.com:Crpdim/work_flow.git"
+    clone_path: "D:/新建文件夹"
+    max_retries: 2
     retry_delay: 5
     recover_on_failure: true
+
+  - name: "ShellCommand"
+    enabled: true
+    commands:
+      - "echo 'Hello, World!'"
+      - "mkdir -p /path/to/dir"
+    max_retries: 3
+    retry_delay: 5
+    recover_on_failure: True
 
   - name: "GitCloneSource"
     enabled: true

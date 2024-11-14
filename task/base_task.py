@@ -1,15 +1,11 @@
-# task/base_task.py
-
 import time
-import logging
+from common.logger import log  # 引入自定义的日志模块
 
 class BaseTask:
     def __init__(self, config):
         self.config = config
         self.is_completed = False
-
-    def log(self, message):
-        logging.info(message)
+        self.log = log
 
     def retry_logic(self, task_func):
         max_retries = int(self.config.get("max_retries", 1))
@@ -32,5 +28,5 @@ class BaseTask:
 
     def recover(self):
         """任务失败后的恢复逻辑"""
-        self.log(f"执行任务失败后的恢复操作: {self.config['name']}")
+        self.log(f"执行任务失败后的恢复操作: {self.config.get('name', '无名任务')}")
         # 在此处可以定义如何恢复任务，例如清理临时文件、重置状态等
